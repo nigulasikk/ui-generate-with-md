@@ -13,6 +13,28 @@ export default function Home() {
   const [markdownContent, setMarkdownContent] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [codeBlock, setCodeBlock] = useState<{ language: string; code: string } | null>(null);
+  
+  useEffect(() => {
+    async function loadInitialMarkdownFiles() {
+      try {
+        const response = await fetch('/api/markdown/files');
+        const data = await response.json();
+        
+        if (data.files && data.files.length > 0) {
+          setSelectedMarkdown(data.files[0]);
+        }
+      } catch (error) {
+        console.error('Error loading initial markdown files:', error);
+      }
+    }
+    
+    loadInitialMarkdownFiles();
+  }, []);
+  
+  useEffect(() => {
+    console.log('Selected markdown changed:', selectedMarkdown);
+    console.log('Markdown content:', markdownContent ? markdownContent.substring(0, 50) + '...' : '');
+  }, [selectedMarkdown, markdownContent]);
 
   useEffect(() => {
     if (selectedMarkdown) {
@@ -102,7 +124,10 @@ export default function Home() {
       <main className="flex flex-1 p-4">
         <div className="flex flex-col w-1/2 pr-4">
           <MarkdownSelector
-            onSelect={setSelectedMarkdown}
+            onSelect={(filename) => {
+              console.log('Setting selected markdown to:', filename);
+              setSelectedMarkdown(filename);
+            }}
             selectedMarkdown={selectedMarkdown}
           />
           

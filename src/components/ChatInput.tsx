@@ -29,6 +29,7 @@ export default function ChatInput({ onSendMessage, isLoading, disabled = false }
         placeholder="Type your message here..."
         disabled={isLoading || disabled}
         className="flex-1 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        id="chat-input"
       />
       <button
         type="submit"

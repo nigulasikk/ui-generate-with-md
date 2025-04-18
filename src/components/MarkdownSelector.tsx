@@ -36,7 +36,10 @@ export default function MarkdownSelector({ onSelect, selectedMarkdown }: Markdow
         id="markdown-select"
         className="w-full p-2 border border-gray-300 rounded-md bg-white"
         value={selectedMarkdown || ''}
-        onChange={(e) => onSelect(e.target.value)}
+        onChange={(e) => {
+          console.log('Markdown selected:', e.target.value);
+          onSelect(e.target.value);
+        }}
       >
         <option value="" disabled>
           Select a markdown file
