@@ -36,7 +36,7 @@ export async function POST(request: Request) {
         Make sure the component is well-commented and easy to understand.
         If the user asks for a specific feature mentioned in the documentation, implement it according to the API described in the docs.`
       },
-      ...messages.map((msg: any) => ({
+      ...messages.map((msg: { role: string; content: string }) => ({
         role: msg.role,
         content: msg.content
       }))

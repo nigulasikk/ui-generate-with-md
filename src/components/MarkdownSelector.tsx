@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { getMarkdownFiles } from '../lib/markdown';
 
 interface MarkdownSelectorProps {
   onSelect: (filename: string) => void;
