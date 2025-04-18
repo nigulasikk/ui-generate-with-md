@@ -1,12 +1,18 @@
 import { NextResponse } from 'next/server';
-import OpenAI from 'openai';
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY || '',
-});
+const apiKey = process.env.openrouter_sk;
+const apiUrl = 'https://openrouter.ai/api/v1/chat/completions';
 
 export async function POST(request: Request) {
   try {
+    if (!apiKey) {
+      console.error('API key is not set');
+      return NextResponse.json(
+        { error: 'API key is not configured' },
+        { status: 500 }
+      );
+    }
+
     const { messages, markdownContent } = await request.json();
 
     if (!messages || !markdownContent) {
@@ -24,8 +30,11 @@ export async function POST(request: Request) {
         
         ${markdownContent}
         
-        When asked to generate a component, provide the code in a code block with the appropriate language tag.
-        Focus on creating clean, functional code that follows best practices.`
+        When asked to generate a component, provide the code in a code block with the appropriate language tag (jsx or tsx).
+        Focus on creating clean, functional React code that follows best practices.
+        Always include imports at the top of your code.
+        Make sure the component is well-commented and easy to understand.
+        If the user asks for a specific feature mentioned in the documentation, implement it according to the API described in the docs.`
       },
       ...messages.map((msg: any) => ({
         role: msg.role,
@@ -33,14 +42,34 @@ export async function POST(request: Request) {
       }))
     ];
 
-    const response = await openai.chat.completions.create({
-      model: 'gpt-3.5-turbo',
-      messages: apiMessages,
-      temperature: 0.7,
-      max_tokens: 2000,
+    console.log('Sending request to LLM API with context length:', markdownContent.length);
+
+    const response = await fetch(apiUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`,
+        'HTTP-Referer': 'http://localhost:3000',
+        'X-Title': 'UI Component Generator'
+      },
+      body: JSON.stringify({
+        model: 'anthropic/claude-3-haiku',
+        messages: apiMessages,
+        temperature: 0.7,
+        max_tokens: 2000,
+      }),
     });
 
-    const generatedContent = response.choices[0].message.content;
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error('API error:', errorData);
+      throw new Error(`API error: ${response.status} ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    
+    const generatedContent = data.choices[0].message.content;
+    console.log('Received response from LLM API');
 
     return NextResponse.json({ content: generatedContent });
   } catch (error) {
