@@ -21,6 +21,8 @@ export default function CodePreview({ code, language }: CodePreviewProps) {
           <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
           <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
           <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/antd/5.11.1/reset.min.css" />
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/antd/5.11.1/antd.min.js"></script>
           <style>
             body { margin: 0; font-family: sans-serif; }
             #root { padding: 1rem; }

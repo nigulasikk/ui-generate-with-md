@@ -1,11 +1,12 @@
 import { NextResponse } from 'next/server';
 
+const USE_MOCK_RESPONSE = !process.env.openrouter_sk;
 const apiKey = process.env.openrouter_sk;
 const apiUrl = 'https://openrouter.ai/api/v1/chat/completions';
 
 export async function POST(request: Request) {
   try {
-    if (!apiKey) {
+    if (!apiKey && !USE_MOCK_RESPONSE) {
       console.error('API key is not set');
       return NextResponse.json(
         { error: 'API key is not configured' },
@@ -64,6 +65,56 @@ export async function POST(request: Request) {
       const errorData = await response.json();
       console.error('API error:', errorData);
       throw new Error(`API error: ${response.status} ${response.statusText}`);
+    }
+
+    if (USE_MOCK_RESPONSE) {
+      console.log('Using mock response for demo');
+      return NextResponse.json({ 
+        content: `Here's a simple form component using Ant Design:
+
+\`\`\`jsx
+import React from 'react';
+import { Form, Input, Button } from 'antd';
+
+const SimpleForm = () => {
+  const onFinish = (values) => {
+    console.log('Form values:', values);
+  };
+
+  return (
+    <Form
+      layout="vertical"
+      initialValues={{ username: '', password: '' }}
+      onFinish={onFinish}
+    >
+      <Form.Item
+        name="username"
+        label="Username"
+        rules={[{ required: true, message: 'Please enter your username' }]}
+      >
+        <Input placeholder="Enter username" />
+      </Form.Item>
+
+      <Form.Item
+        name="password"
+        label="Password"
+        rules={[{ required: true, message: 'Please enter your password' }]}
+      >
+        <Input.Password placeholder="Enter password" />
+      </Form.Item>
+
+      <Form.Item>
+        <Button type="primary" htmlType="submit">
+          Submit
+        </Button>
+      </Form.Item>
+    </Form>
+  );
+};
+
+export default SimpleForm;
+\`\`\``
+      });
     }
 
     const data = await response.json();

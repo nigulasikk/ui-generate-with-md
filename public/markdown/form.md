@@ -54,7 +54,7 @@ interface Rule {
 ## Basic Usage
 
 ```jsx
-import { Form, Input, Button } from '@/components/ui';
+import { Form, Input, Button } from 'antd';
 
 function App() {
   const onFinish = (values) => {
@@ -160,8 +160,8 @@ function App() {
 ## Form with Dynamic Fields
 
 ```jsx
-import { Form, Input, Button, Space } from '@/components/ui';
-import { MinusCircleOutlined, PlusOutlined } from 'lucide-react';
+import { Form, Input, Button, Space } from 'antd';
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 
 function DynamicForm() {
   return (

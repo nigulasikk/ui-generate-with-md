@@ -38,7 +38,7 @@ interface ColumnConfig {
 ## Basic Usage
 
 ```jsx
-import { Table } from '@/components/ui';
+import { Table } from 'antd';
 
 const columns = [
   {
@@ -93,8 +93,8 @@ const columns = [
     key: 'action',
     render: (_, record) => (
       <div>
-        <button onClick={() => handleEdit(record)}>Edit</button>
-        <button onClick={() => handleDelete(record)}>Delete</button>
+        <Button type="link" onClick={() => handleEdit(record)}>Edit</Button>
+        <Button type="link" danger onClick={() => handleDelete(record)}>Delete</Button>
       </div>
     )
   }
